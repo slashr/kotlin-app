@@ -1,0 +1,33 @@
+deployment:
+  enabled: true
+
+image:
+  name: dawker/sample-kotlin
+  tag: latest
+
+container:
+  port: 8080
+  metricsPort: 8081
+
+metrics:
+  enabled: true
+
+healthcheck:
+  livenessProbe:
+    httpGet:
+      path: "/"
+      port: "http"
+      scheme: HTTP
+    timeoutSeconds: 2
+    periodSeconds: 5
+    successThreshold: 1
+    failureThreshold: 12
+  readinessProbe:
+    httpGet:
+      path: "/"
+      port: "http"
+      scheme: HTTP
+    timeoutSeconds: 1
+    periodSeconds: 3
+    successThreshold: 1
+    failureThreshold: 5

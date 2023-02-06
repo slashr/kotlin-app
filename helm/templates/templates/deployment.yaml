@@ -1,0 +1,42 @@
+{{ if .Values.deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port }}
+              protocol: TCP
+{{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.container.metricsPort }}
+              protocol: TCP
+{{- end }}
+          livenessProbe:
+            {{ toYaml $.Values.healthcheck.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{ toYaml $.Values.healthcheck.readinessProbe | nindent 12 }}
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+{{- end }}

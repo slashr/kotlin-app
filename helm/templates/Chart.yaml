@@ -1,0 +1,6 @@
+apiVersion: v2
+name: up42-kotlin-chart
+description: A chart for installing Kotlin based apps
+
+type: application
+version: v0.0.2
