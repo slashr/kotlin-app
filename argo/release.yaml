@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: up42-kotlin
+  namespace: argo-cd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/slashr/kotlin-app.git
+      revision: setup
+      directories:
+      - path: "helm/envs/**"
+  template:
+    metadata:
+      name: 'kotlin-app-{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/slashr/kotlin-app.git
+        targetRevision: setup
+        helm:
+          valueFiles:
+            - "clusters/{{path.basename}}/values.yaml"
+        path: 'helm/'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: 'default'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
