@@ -20,7 +20,7 @@ spec:
         targetRevision: setup
         helm:
           valueFiles:
-            - "clusters/{{path.basename}}/values.yaml"
+            - "envs/{{path.basename}}/values.yaml"
         path: 'helm/'
       destination:
         server: 'https://kubernetes.default.svc'
