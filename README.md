@@ -14,14 +14,19 @@
 
 # How-To
 ### Building the Docker image & pushing to your own registry
-1. cd app
-2. docker build . -t your-private-registry-url:tag
-3. docker push your-private-registry-url
+1. `cd app`
+2. `docker build . -t your-private-registry-url:tag`
+3. `docker push your-private-registry-url`
 
 ### Modifying Configuration using the Helm chart
-1. cd helm
+1. `cd helm`
 2. Inside values.yaml, change the value of `app.image.name` and `app.image.tag` to use your own private Docker image 
 3. Similary, change the value of the `dbInitApp.enabled` to true and set appropriate values for the image and command if you want to initialise the database.
+
+### Installing the Helm chart manually
+1. `cd helm`
+2. `helm package .`
+3. helm install `helm install check up42-kotlin-chart-v0.0.2.tgz`
 
 # Notes
 1. The `helm/templates/prometheus-service-monitory.yaml` can be used to monitor the health of the app and extend to also include custom metrics
