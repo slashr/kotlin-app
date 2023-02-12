@@ -13,17 +13,21 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      initContainers:
+        - name: kotlin-db-init
+          image: "{{ .Values.dbInitApp.image.name }}:{{ .Values.dbInitApp.image.tag }}"
+          command: "{{ .Values.dbInitApp.initCommand }}"
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.app.image.name }}:{{ .Values.app.image.tag }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: {{ .Values.container.port }}
+              containerPort: {{ .Values.app.container.port }}
               protocol: TCP
 {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.container.metricsPort }}
+              containerPort: {{ .Values.app.container.metricsPort }}
               protocol: TCP
 {{- end }}
           livenessProbe:
@@ -39,4 +43,12 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+{{- if .Values.database.enabled }}
+        - name: {{ .Release.Name }}-database
+          image: "{{ .Values.database.image.name }}:{{ .Values.database.image.tag }}"
+          command:
+            - {{ .Values.database.command }}
+          args:
+            - {{ .Values.database.args }}
+{{- end }}
 {{- end }}

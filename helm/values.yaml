@@ -1,13 +1,25 @@
 deployment:
   enabled: true
 
-image:
-  name: dawker/sample-kotlin
-  tag: latest
+dbInitApp:
+  image:
+    name: dawker/sample-kotlin
+    tag: latest
+  initCommand: ["mysql <", "db_backup.dump"]
 
-container:
-  port: 8080
-  metricsPort: 8081
+app:
+  image:
+    name: dawker/sample-kotlin
+    tag: latest
+  container:
+    port: 8080
+    metricsPort: 8081
+
+database:
+  enabled: true
+  image:
+    name: mysql
+    tag: latest
 
 metrics:
   enabled: true
