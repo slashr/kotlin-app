@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: kotlin-db-init
           image: "{{ .Values.dbInitApp.image.name }}:{{ .Values.dbInitApp.image.tag }}"
-          command: "{{ .Values.dbInitApp.initCommand }}"
+          command: {{ .Values.dbInitApp.initCommand }}
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.app.image.name }}:{{ .Values.app.image.tag }}"
