@@ -1,0 +1,11 @@
+# Only for demo purposes. Not advocating disabling metrics and monitoring for dev/test envs
+metrics:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+  path: /metrics
+  scrapeTimeout: 10s
+  interval: 10s
+
+
