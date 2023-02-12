@@ -9,6 +9,7 @@ service:
   metricsPort: 8081
 
 dbInitApp:
+  enabled: false
   image:
     name: dawker/sample-kotlin
     tag: latest

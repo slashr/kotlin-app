@@ -13,10 +13,12 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      {{- if .Values.dbInitApp.enabled }}
       initContainers:
         - name: kotlin-db-init
           image: "{{ .Values.dbInitApp.image.name }}:{{ .Values.dbInitApp.image.tag }}"
           command: {{ .Values.dbInitApp.initCommand }}
+      {{- end }}
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.app.image.name }}:{{ .Values.app.image.tag }}"
