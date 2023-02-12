@@ -48,5 +48,8 @@ spec:
         {{- if .Values.database.enabled }}
         - name: {{ .Release.Name }}-database
           image: "{{ .Values.database.image.name }}:{{ .Values.database.image.tag }}"
+          env:
+            - name: MYSQL_RANDOM_ROOT_PASSWORD #For the sake of the demo 
+              value: "true"
         {{- end }}
 {{- end }}
