@@ -1,6 +1,13 @@
 deployment:
   enabled: true
 
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080
+  targetPort: "http"
+  metricsPort: 8081
+
 dbInitApp:
   image:
     name: dawker/sample-kotlin
@@ -43,3 +50,10 @@ healthcheck:
     periodSeconds: 3
     successThreshold: 1
     failureThreshold: 5
+
+# Creates a Prometheus ServiceMonitor object to scrape custom app metrics if exposed
+serviceMonitor:
+  enabled: true
+  path: /metrics
+  scrapeTimeout: 10s
+  interval: 10s

@@ -1,0 +1,27 @@
+{{ if .Values.service.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: 'true'
+  name: {{ .Release.Name }}-service
+  labels:
+    release: prometheus
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ default "http" .Values.service.targetPort }}
+      protocol: TCP
+      name: {{ default "http" .Values.service.name }}
+{{- if .Values.serviceMonitor.enabled }}
+    - port: {{ .Values.app.container.metricsPort }}
+      targetPort: {{ .Values.app.container.metricsPort }} 
+      protocol: TCP
+      name: metrics
+{{- end }}
+  selector:
+    up42.com/app: {{ .Release.Name }}
+{{- end }}
+
